@@ -1,38 +1,15 @@
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-*$py.class
+# Ignore everything by default
+*
 
-# C extensions
-*.so
+# Allow directories so git can traverse into them
+!*/
 
-# Distribution / packaging
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
+# Explicitly include the doctor demo files
+!AI/01_DOCTOR_PRESENTATION_DEMO/
+!AI/01_DOCTOR_PRESENTATION_DEMO/*
+!AI/01_DOCTOR_PRESENTATION_DEMO/**
 
-# Virtual environments
-venv/
-env/
-ENV/
-smart_basket_env/
-
-# Service Keys & Credentials
-serviceAccountKey.json
-*.pem
-
-# Model Runs Outputs (Optional large logs)
-runs/detect/smart_basket_v1/weights/last.pt
+# Explicitly include READMEs and license
+!README.md
+!LICENSE
+!.gitignore
