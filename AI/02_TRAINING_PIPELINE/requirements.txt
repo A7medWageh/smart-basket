@@ -1,0 +1,102 @@
+# ============================================================
+# Smart Basket — Training Requirements
+# ============================================================
+#
+# ازاي تستخدم الملف ده:
+#   pip install -r requirements.txt
+#
+# لو شغال على Google Colab:
+#   !pip install -r requirements.txt
+#
+# ملاحظة مهمة:
+#   الـ torch مش هنا — Colab جاهز بيه.
+#   لو شغال محلي على Windows/Linux، اتبع الـ PyTorch website
+#   لتثبيت الـ CUDA version المناسبة لكارت الشاشة بتاعك.
+# ============================================================
+
+# ─── CORE FRAMEWORK ──────────────────────────────────────────
+# ultralytics: ده الـ framework الرئيسي اللي بيشيل YOLO كله
+# بيشتغل على PyTorch وبيوفر:
+#   - تدريب (train)
+#   - تقييم (val)
+#   - تنبؤ (predict)
+#   - تصدير (export) لـ ONNX, NCNN, TFLite, etc.
+# نستخدم أحدث نسخة دايماً (>= 8.4.0 لأن ده اللي بيدعم YOLO26)
+ultralytics>=8.4.0
+
+# ─── ONNX EXPORT ─────────────────────────────────────────────
+# onnx: ده الـ format اللي هنحول ليه الموديل بعد التدريب
+# Open Neural Network Exchange — بيخلي الموديل يشتغل على أي runtime
+# من غيره مش هتقدر تعمل export لـ ONNX
+onnx>=1.21.0
+
+# onnxruntime: ده الـ engine اللي بيشغل الـ ONNX model على CPU
+# على الـ Raspberry Pi مش فيه GPU، فـ CPU execution هو الخيار
+# بنستخدمه للـ inference على الـ laptop والـ Pi
+onnxruntime>=1.20.0
+
+# onnxslim: بيعمل optimize للـ ONNX graph
+# يحذف العمليات المكررة، يدمج الـ layers — بيصغر الموديل وبيسرعه
+onnxslim>=0.1.30
+
+# ─── QUANTIZATION ────────────────────────────────────────────
+# onnxruntime-tools: بيوفر الـ quantization tools
+# هنستخدمه لعمل INT8 model (3.5x أصغر وأسرع على الـ CPU)
+# ده مهم جداً للـ Raspberry Pi
+onnxruntime-tools>=1.7.0
+
+# ─── DATA MANAGEMENT ─────────────────────────────────────────
+# roboflow: بيتيح تحميل الـ dataset من Roboflow مباشرة
+# من غيره هتضطر تحمل يدوياً وتفك الـ zip يدوياً
+roboflow>=1.1.0
+
+# ─── IMAGE PROCESSING ────────────────────────────────────────
+# opencv-python: مكتبة الصور والفيديو
+# بنستخدمها في:
+#   - قراءة الصور (cv2.imread)
+#   - الرسم على الصور (bounding boxes)
+#   - تحويل الألوان (BGR to RGB)
+opencv-python>=4.10.0
+
+# ─── SCIENTIFIC COMPUTING ────────────────────────────────────
+# numpy: حسابات المصفوفات
+# كل الـ tensors والـ arrays بتمر عليه
+numpy>=1.24.0
+
+# ─── VISUALIZATION ───────────────────────────────────────────
+# matplotlib: رسم الـ charts والـ graphs
+# بنستخدمه لرسم:
+#   - منحنى الـ loss
+#   - منحنى الـ mAP
+#   - confusion matrix
+#   - precision-recall curves
+matplotlib>=3.7.0
+
+# ─── AUGMENTATION ────────────────────────────────────────────
+# albumentations: مكتبة تعزيز الصور (augmentation)
+# YOLO بيستخدمها تلقائياً لو مثبتة
+# بتضيف: blur, noise, CLAHE, fog, shadows, etc.
+# تحسن accuracy بشكل ملحوظ بدون صور إضافية
+albumentations>=1.3.0
+
+# ─── UTILITIES ───────────────────────────────────────────────
+# pyyaml: لقراءة وكتابة ملفات الـ YAML (data.yaml, config files)
+pyyaml>=6.0
+
+# tqdm: بيعمل progress bars أثناء التدريب والـ inference
+tqdm>=4.65.0
+
+# psutil: بيجيب معلومات النظام (RAM, CPU usage)
+# بنستخدمه لمراقبة استهلاك الموارد أثناء التدريب
+psutil>=5.9.0
+
+# ─── OPTIONAL: EXPERIMENT TRACKING ──────────────────────────
+# wandb: Weights & Biases — بيسجل نتائج التدريب online
+# عندك dashboard جميل تتابع فيه الـ loss والـ mAP
+# اختياري لكن مفيد جداً
+# wandb>=0.15.0
+
+# ─── OPTIONAL: TENSORBOARD ───────────────────────────────────
+# tensorboard: بديل محلي لـ wandb
+# YOLO بيدعمه تلقائياً
+# tensorboard>=2.13.0

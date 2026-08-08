@@ -1,0 +1,88 @@
+# ============================================================
+# Smart Basket — Dataset Configuration
+# ============================================================
+#
+# الملف ده بيخبر الـ YOLO بـ:
+#   1. فين الصور (المسارات)
+#   2. كام class عندنا
+#   3. إيه اسم كل class
+#
+# مهم جداً:
+#   - أسماء الـ classes لازم تتطابق بالظبط مع classes.txt
+#   - الـ class_id (الرقم) لازم يتطابق مع اللي في ملفات الـ labels
+#   - لو غيرت ترتيب الـ classes هتحتاج تعيد اللبل من الأول!
+# ============================================================
+
+# ─── DATASET ROOT PATH ───────────────────────────────────────
+# path: المجلد الرئيسي للـ dataset
+#
+# على Google Colab:
+#   لو حملت من Roboflow: /content/grocery-items-v1
+#   لو رفعت يدوياً: /content/drive/MyDrive/smart_basket_dataset
+#
+# على الـ laptop:
+#   ./grocery-items-v1  (نسبي — في نفس مجلد الـ notebook)
+#   أو absolute path: C:/Users/you/datasets/grocery-items-v1
+#
+# الـ YOLO بيدور على train وval وtest relative to this path
+path: /content/grocery-items-v1
+
+# ─── SPLIT PATHS ─────────────────────────────────────────────
+# المسارات دي relative to path فوق
+#
+# كل مجلد جوفه مجلد images/ ومجلد labels/
+# images/: الصور (.jpg, .png, .jpeg)
+# labels/: ملفات النص (.txt) — واحد per صورة
+#
+# كل سطر في ملف الـ label:
+#   class_id  x_center  y_center  width  height
+#   الأرقام كلها normalized (0.0 to 1.0)
+#
+# مثال: 1 0.512 0.437 0.234 0.456
+#   class_id=1 (pepsi_can)
+#   المركز في 51.2% من العرض, 43.7% من الارتفاع
+#   الـ box عرضه 23.4% من العرض, ارتفاعه 45.6% من الارتفاع
+train: train/images
+val:   valid/images
+test:  test/images
+
+# ─── NUMBER OF CLASSES ───────────────────────────────────────
+# nc: Number of Classes
+# لازم يتطابق بالظبط مع عدد الـ names تحت
+# لو غلطت هنا الـ YOLO هيعمل error فوراً
+nc: 10
+
+# ─── CLASS NAMES ─────────────────────────────────────────────
+# Format: dict {class_id: class_name}
+# ده الـ format الصح لـ YOLO26 (مش list قديم)
+#
+# ترتيب الأرقام مهم جداً:
+#   0 → water_bottle  ← أول class، الـ model هيسمي predictions بالاسم ده
+#   1 → pepsi_can
+#   ... إلخ
+#
+# القاعدة: underscore مش spaces، lowercase كل حاجة
+# ❌ "Pepsi Can"   → غلط
+# ❌ "pepsi-can"   → غلط
+# ✅ "pepsi_can"   → صح
+names:
+  0: water_bottle
+  1: pepsi_can
+  2: coca_cola_can
+  3: juice_box
+  4: milk_carton
+  5: chocolate_bar
+  6: chips_bag
+  7: biscuits_pack
+  8: rice_bag
+  9: sugar_bag
+
+# ─── ROBOFLOW METADATA ───────────────────────────────────────
+# ده documentation فقط — الـ YOLO مش بيستخدمه
+# بس مهم عشان تتذكر مين صنع الـ dataset وإمتى
+roboflow:
+  workspace: smart-basket-workspace
+  project:   grocery-items-v1
+  version:   1
+  license:   Private
+  url:       https://universe.roboflow.com/smart-basket-workspace/grocery-items-v1/dataset/1

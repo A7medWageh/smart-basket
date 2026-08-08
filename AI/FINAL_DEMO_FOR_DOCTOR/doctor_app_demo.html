@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Basket - Doctor Demo Interface</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent-green: #10b981;
+            --accent-blue: #3b82f6;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --danger: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .phone-mockup {
+            width: 400px;
+            height: 780px;
+            background-color: #000;
+            border-radius: 45px;
+            padding: 12px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 30px rgba(16, 185, 129, 0.25);
+            border: 4px solid #334155;
+            position: relative;
+        }
+
+        .screen {
+            background-color: var(--bg-color);
+            width: 100%;
+            height: 100%;
+            border-radius: 35px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .status-bar {
+            height: 35px;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: var(--text-sub);
+            background: rgba(15, 23, 42, 0.9);
+        }
+
+        .app-header {
+            padding: 16px 20px;
+            background: var(--card-bg);
+            border-bottom: 1px solid #334155;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .app-title {
+            font-weight: 800;
+            font-size: 19px;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .connection-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            padding: 5px 12px;
+            border-radius: 20px;
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--accent-green);
+            font-weight: 700;
+        }
+
+        .pulse-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background-color: var(--accent-green);
+            box-shadow: 0 0 10px var(--accent-green);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            50% { transform: scale(1.25); opacity: 1; }
+            100% { transform: scale(0.95); opacity: 0.8; }
+        }
+
+        .cart-body {
+            flex: 1;
+            padding: 16px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .empty-cart {
+            margin: auto;
+            text-align: center;
+            color: var(--text-sub);
+        }
+
+        .empty-cart svg {
+            width: 70px;
+            height: 70px;
+            fill: #475569;
+            margin-bottom: 12px;
+        }
+
+        .item-card {
+            background-color: var(--card-bg);
+            border: 1px solid #334155;
+            border-radius: 16px;
+            padding: 14px 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(15px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .item-info h4 {
+            font-size: 16px;
+            color: var(--text-main);
+            margin-bottom: 4px;
+            font-weight: 700;
+        }
+
+        .item-info p {
+            font-size: 14px;
+            color: var(--accent-blue);
+            font-weight: 700;
+        }
+
+        .item-badge {
+            background-color: #334155;
+            color: #fff;
+            font-weight: 800;
+            padding: 6px 14px;
+            border-radius: 12px;
+            font-size: 15px;
+        }
+
+        .cart-footer {
+            background-color: var(--card-bg);
+            border-top: 1px solid #334155;
+            padding: 18px 20px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 15px;
+            color: var(--text-sub);
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px dashed #334155;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            background: linear-gradient(135deg, var(--accent-green), #059669);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 14px;
+            font-weight: 800;
+            font-size: 17px;
+            margin-top: 14px;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="phone-mockup">
+        <div class="screen">
+            <!-- Status Bar -->
+            <div class="status-bar">
+                <span>9:41</span>
+                <span>📶 🛜 🔋 100%</span>
+            </div>
+
+            <!-- App Header -->
+            <div class="app-header">
+                <div class="app-title">
+                    🛒 السلة الذكية
+                </div>
+                <div class="connection-status" id="connStatus">
+                    <div class="pulse-dot"></div>
+                    <span id="statusText">جاري الاتصال...</span>
+                </div>
+            </div>
+
+            <!-- Cart Items List -->
+            <div class="cart-body" id="cartItems">
+                <div class="empty-cart" id="emptyState">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M17,18A2,2 0 0,1 19,20A2,2 0 0,1 17,22A2,2 0 0,1 15,20A2,2 0 0,1 17,18M1,2H3.27L4.27,4.27L5.73,7.41L7,10L6,11A1,1 0 0,0 6,12A1,1 0 0,0 7,13H19V11H7.42C7.38,11 7.35,10.97 7.35,10.93L7.38,10.85L8.1,9.5H15.55C16.3,9.5 16.96,9.08 17.3,8.45L21.1,1.56L19.36,0.61L15.55,7.5H8.53L4.54,2H1V2M7,18A2,2 0 0,1 9,20A2,2 0 0,1 7,22A2,2 0 0,1 5,20A2,2 0 0,1 7,18Z"/>
+                    </svg>
+                    <p style="font-size: 16px; font-weight: 700;">السلة فارغة حالياً</p>
+                    <small style="color: #64748b; margin-top: 6px; display: block;">الكاميرا جاهزة لتعرف المنتجات</small>
+                </div>
+            </div>
+
+            <!-- Cart Footer -->
+            <div class="cart-footer">
+                <div class="summary-row">
+                    <span>إجمالي عناصر السلة:</span>
+                    <span id="totalCount" style="color: var(--text-main); font-weight: bold;">0</span>
+                </div>
+                <div class="total-row">
+                    <span>الحساب الكلي:</span>
+                    <span id="totalPrice" style="color: var(--accent-green);">0.00 ج.م</span>
+                </div>
+                <button class="checkout-btn" onclick="alert('تم إرسال الفاتورة لبوابة الدفع بنجاح!')">إتمام الشراء والتدفّع 💳</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const socket = new WebSocket('ws://localhost:8765');
+        const connStatus = document.getElementById('connStatus');
+        const statusText = document.getElementById('statusText');
+        const cartItemsContainer = document.getElementById('cartItems');
+        const emptyState = document.getElementById('emptyState');
+        const totalCountEl = document.getElementById('totalCount');
+        const totalPriceEl = document.getElementById('totalPrice');
+
+        socket.onopen = () => {
+            statusText.innerText = "الذكاء الاصطناعي متصل 🟢";
+            connStatus.style.color = "#10b981";
+        };
+
+        socket.onclose = () => {
+            statusText.innerText = "غير متصل 🔴";
+            connStatus.style.color = "#ef4444";
+        };
+
+        socket.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            updateUI(data);
+        };
+
+        function updateUI(data) {
+            const items = data.items || {};
+            const itemKeys = Object.keys(items);
+
+            if (itemKeys.length === 0) {
+                cartItemsContainer.innerHTML = '';
+                cartItemsContainer.appendChild(emptyState);
+                totalCountEl.innerText = '0';
+                totalPriceEl.innerText = '0.00 ج.م';
+                return;
+            }
+
+            cartItemsContainer.innerHTML = '';
+
+            let count = 0;
+            itemKeys.forEach(key => {
+                const item = items[key];
+                count += item.quantity;
+
+                const card = document.createElement('div');
+                card.className = 'item-card';
+                card.innerHTML = `
+                    <div class="item-info">
+                        <h4>${item.name}</h4>
+                        <p>${item.price.toFixed(2)} ج.م / قطعة</p>
+                    </div>
+                    <div class="item-badge">x${item.quantity}</div>
+                `;
+                cartItemsContainer.appendChild(card);
+            });
+
+            totalCountEl.innerText = count;
+            totalPriceEl.innerText = (data.total_price || 0).toFixed(2) + ' ج.م';
+        }
+    </script>
+</body>
+</html>
