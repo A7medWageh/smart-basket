@@ -32,6 +32,18 @@ PRODUCT_ID_MAP = {
     "pepsi diet": 3,
 }
 
+try:
+    import spaces
+    HAS_SPACES = True
+except Exception:
+    HAS_SPACES = False
+
+def gpu_decorator(func):
+    if HAS_SPACES and hasattr(spaces, 'GPU'):
+        return spaces.GPU(func)
+    return func
+
+@gpu_decorator
 def predict_product(image, cart_code="CART_01", action="added"):
     if image is None:
         return {"status": "error", "message": "No image provided"}
