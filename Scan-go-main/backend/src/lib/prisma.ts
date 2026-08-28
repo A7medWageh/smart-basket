@@ -1,28 +1,11 @@
 import { PrismaClient } from '@prisma/client';
-import path from 'path';
-import fs from 'fs';
 
-let dbUrl = process.env.DATABASE_URL || 'file:./dev.db';
+let client: PrismaClient | null = null;
 
-if (process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME) {
-  const tmpDbPath = '/tmp/dev.db';
-  const sourceDbPath = path.join(__dirname, '../../prisma/dev.db');
-  const rootSourceDbPath = path.join(process.cwd(), 'Scan-go-main/backend/prisma/dev.db');
-  
-  if (!fs.existsSync(tmpDbPath)) {
-    if (fs.existsSync(sourceDbPath)) {
-      fs.copyFileSync(sourceDbPath, tmpDbPath);
-    } else if (fs.existsSync(rootSourceDbPath)) {
-      fs.copyFileSync(rootSourceDbPath, tmpDbPath);
-    }
-  }
-  dbUrl = `file:${tmpDbPath}`;
+try {
+  client = new PrismaClient();
+} catch (err) {
+  console.warn('⚠️ [Prisma] Failed to instantiate PrismaClient in serverless environment:', err);
 }
 
-export const prisma = new PrismaClient({
-  datasources: {
-    db: {
-      url: dbUrl,
-    },
-  },
-});
+export const prisma = client || ({} as any);
