@@ -40,7 +40,8 @@ except ImportError:
 # ─── CONFIGURATION (إعدادات الربط الخاصة بالباك إند) ───────────
 
 # 1. رابط الـ AI Webhook في الباك إند الحي (Scan & Go Ngrok API)
-AI_WEBHOOK_URL = "https://cytoplast-courier-dandelion.ngrok-free.dev/api/ai/detection"
+AI_WEBHOOK_URL = "https://smart-basket-theta.vercel.app/api/ai/detection"
+
 
 # 2. كود السلة الخاص بالربط (Cart Code)
 CART_CODE = "CART_01"
