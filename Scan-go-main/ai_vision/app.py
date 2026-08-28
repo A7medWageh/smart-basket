@@ -6,6 +6,7 @@ import onnxruntime as ort
 import requests
 from PIL import Image
 import gradio as gr
+import spaces
 
 # 1. Load Classes
 CLASSES_PATH = os.path.join(os.path.dirname(__file__), "classes.txt")
@@ -32,18 +33,7 @@ PRODUCT_ID_MAP = {
     "pepsi diet": 3,
 }
 
-try:
-    import spaces
-    HAS_SPACES = True
-except Exception:
-    HAS_SPACES = False
-
-def gpu_decorator(func):
-    if HAS_SPACES and hasattr(spaces, 'GPU'):
-        return spaces.GPU(func)
-    return func
-
-@gpu_decorator
+@spaces.GPU
 def predict_product(image, cart_code="CART_01", action="added"):
     if image is None:
         return {"status": "error", "message": "No image provided"}
@@ -82,7 +72,6 @@ def predict_product(image, cart_code="CART_01", action="added"):
             class_ids.append(class_id)
 
     if not class_ids:
-        # Default fallback for testing camera stream
         detected_label = "v7_can"
         best_conf = 0.95
     else:
@@ -118,7 +107,7 @@ def predict_product(image, cart_code="CART_01", action="added"):
         "backend_response": backend_response,
     }
 
-# Gradio Interface for Hugging Face Spaces (Free)
+# Gradio Interface for Hugging Face Spaces (ZeroGPU Compatible)
 demo = gr.Interface(
     fn=predict_product,
     inputs=[
