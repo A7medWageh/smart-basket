@@ -5,6 +5,9 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -40,3 +43,15 @@ jobs:
         with:
           name: ScanGo-SmartBasket-Release-APK
           path: Scan-go-main/build/app/outputs/flutter-apk/app-release.apk
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.0.0
+          name: Scan & Go Smart Basket App v1.0.0
+          body: |
+            🚀 **Scan & Go Smart Shopping Cart Mobile App**
+            - Connected to Live Vercel Backend (`smart-basket-theta.vercel.app`)
+            - Integrated with Hugging Face Cloud AI Vision (`wegoo-ai-bascket.hf.space`)
+            - Supports automatic detection for `v7_can` and `big_chips`
+          files: Scan-go-main/build/app/outputs/flutter-apk/app-release.apk
