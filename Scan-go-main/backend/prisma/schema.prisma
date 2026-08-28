@@ -1,0 +1,87 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               Int               @id @default(autoincrement())
+  name             String
+  email            String            @unique
+  phone            String?
+  password         String
+  faceEnrolled     Boolean           @default(false)
+  faceEnrolledAt   DateTime?
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  shoppingSessions ShoppingSession[]
+  orders           Order[]
+}
+
+model Product {
+  id          Int        @id @default(autoincrement())
+  nameAr      String
+  nameEn      String
+  barcode     String     @unique
+  price       Float
+  imageUrl    String
+  category    String
+  weightGrams Float      @default(0.0)
+  stock       Int        @default(100)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  cartItems   CartItem[]
+}
+
+model Cart {
+  id               Int               @id @default(autoincrement())
+  cartCode         String            @unique // e.g. "CART_01"
+  status           String            @default("AVAILABLE") // "AVAILABLE", "IN_USE", "MAINTENANCE"
+  createdAt        DateTime          @default(now())
+  shoppingSessions ShoppingSession[]
+}
+
+model ShoppingSession {
+  id             Int        @id @default(autoincrement())
+  userId         Int
+  cartId         Int
+  status         String     @default("ACTIVE") // "ACTIVE", "COMPLETED", "CANCELLED"
+  faceVerified   Boolean    @default(false)
+  faceVerifiedAt DateTime?
+  startedAt      DateTime   @default(now())
+  completedAt    DateTime?
+  user           User       @relation(fields: [userId], references: [id])
+  cart           Cart       @relation(fields: [cartId], references: [id])
+  items          CartItem[]
+  orders         Order[]
+}
+
+model CartItem {
+  id         Int             @id @default(autoincrement())
+  sessionId  Int
+  productId  Int
+  quantity   Int             @default(1)
+  unitPrice  Float
+  detectedBy String          @default("AI") // "AI", "MANUAL"
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @updatedAt
+  session    ShoppingSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  product    Product         @relation(fields: [productId], references: [id])
+}
+
+model Order {
+  id            Int             @id @default(autoincrement())
+  orderNumber   String          @unique // e.g. "ORD-2026-X892"
+  sessionId     Int
+  userId        Int
+  totalAmount   Float
+  paymentMethod String // "INSTAPAY", "VODAFONE_CASH", "VISA"
+  paymentStatus String          @default("COMPLETED") // "COMPLETED", "PENDING", "FAILED"
+  exitQrCode    String? // Base64 or token for exit gate scanner
+  createdAt     DateTime        @default(now())
+  session       ShoppingSession @relation(fields: [sessionId], references: [id])
+  user          User            @relation(fields: [userId], references: [id])
+}

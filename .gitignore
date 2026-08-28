@@ -1,15 +1,12 @@
-# Ignore everything by default
-*
+# Ignore dataset images and temp runs
+AI/dataset_v7_bigchips/
+runs/
+__pycache__/
+*.pyc
 
-# Allow directories so git can traverse into them
-!*/
-
-# Explicitly include the doctor demo files
-!AI/01_DOCTOR_PRESENTATION_DEMO/
-!AI/01_DOCTOR_PRESENTATION_DEMO/*
-!AI/01_DOCTOR_PRESENTATION_DEMO/**
-
-# Explicitly include READMEs and license
+# Explicitly keep all project AI files, models, and scripts
+!AI/
+!AI/**
 !README.md
 !LICENSE
 !.gitignore

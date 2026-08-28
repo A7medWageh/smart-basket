@@ -1,0 +1,11 @@
+# Smart Basket — V7 Can & Big Chips Dataset Config
+
+path: c:/Users/user/Desktop/Smart-Basket-main/AI/dataset_v7_bigchips
+train: train/images
+val: valid/images
+test: valid/images
+
+nc: 2
+names:
+  0: v7_can
+  1: big_chips
