@@ -22,8 +22,11 @@ else:
         "tea el_arosa"
     ]
 
-# 2. Load ONNX Model
-MODEL_PATH = os.path.join(os.path.dirname(__file__), "best.onnx")
+# 2. Load ONNX Model (Check best_int8.onnx first, fallback to best.onnx)
+INT8_PATH = os.path.join(os.path.dirname(__file__), "best_int8.onnx")
+FP32_PATH = os.path.join(os.path.dirname(__file__), "best.onnx")
+MODEL_PATH = INT8_PATH if os.path.exists(INT8_PATH) else FP32_PATH
+
 opts = ort.SessionOptions()
 opts.graph_optimization_level = ort.GraphOptimizationLevel.ORT_ENABLE_ALL
 opts.intra_op_num_threads = 4
@@ -41,8 +44,8 @@ try:
 except Exception:
     MODEL_INPUT_SIZE = 320
 
-# 3. Backend URL (can be overridden via environment variable)
-BACKEND_URL = os.getenv("BACKEND_URL", "https://cytoplast-courier-dandelion.ngrok-free.dev/api/ai/detection")
+# 3. Backend URL (Default to production Vercel server)
+BACKEND_URL = os.getenv("BACKEND_URL", "https://smart-basket-theta.vercel.app/api/ai/detection")
 
 print(f"✅ [AI Service] Model loaded successfully from {MODEL_PATH}")
 print(f"📐 [AI Service] Model Input Dimensions: {input_node.shape} -> target: {MODEL_INPUT_SIZE}x{MODEL_INPUT_SIZE}")
