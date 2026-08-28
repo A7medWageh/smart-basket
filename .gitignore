@@ -1,12 +1,16 @@
-# Ignore dataset images and temp runs
+# Ignore heavy model binaries and dataset runs
+*.onnx
+*.pt
 AI/dataset_v7_bigchips/
 runs/
 __pycache__/
 *.pyc
 
-# Explicitly keep all project AI files, models, and scripts
+# Explicitly keep code, scripts, configs, and setup docs
 !AI/
 !AI/**
+!Scan-go-main/
+!Scan-go-main/**
 !README.md
 !LICENSE
 !.gitignore
